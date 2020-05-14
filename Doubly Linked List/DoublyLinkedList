@@ -1,0 +1,486 @@
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+// -------------------------------------------------------------------------
+/**
+ *  This class contains the methods of Doubly Linked List.
+ *
+ *  @author  Róisín Burke
+ *  @version 09/10/18 11:13:22
+ */
+/**
+ * Class DoublyLinkedList: implements a *generic* Doubly Linked List.
+ * @param <T> This is a type parameter. T is used as a class name in the
+ * definition of this class.
+ *
+ * When creating a new DoublyLinkedList, T should be instantiated with an
+ * actual class name that extends the class Comparable.
+ * Such classes include String and Integer.
+ *
+ * For example to create a new DoublyLinkedList class containing String data:
+ *    DoublyLinkedList<String> myStringList = new DoublyLinkedList<String>();
+ *
+ * The class offers a toString() method which returns a comma-separated sting of
+ * all elements in the data structure.
+ *
+ * This is a bare minimum class you would need to completely implement.
+ * You can add additional methods to support your code. Each method will need
+ * to be tested by your jUnit tests -- for simplicity in jUnit testing
+ * introduce only public methods.
+ */
+class DoublyLinkedList<T extends Comparable<T>>
+{
+    /**
+     * private class DLLNode: implements a *generic* Doubly Linked List node.
+     */
+ private class DLLNode
+ {
+  public final T data; // this field should never be updated. It gets its
+  // value once from the constructor DLLNode.
+  public DLLNode next;
+  public DLLNode prev;
+  private int counter;
+  /**
+   * Constructor
+   * @param theData : data of type T, to be stored in the node
+   * @param prevNode : the previous Node in the Doubly Linked List
+   * @param nextNode : the next Node in the Doubly Linked List
+   * @return DLLNode
+   */
+  public DLLNode(T theData, DLLNode prevNode, DLLNode nextNode)
+  {
+   data = theData;
+   prev = prevNode;
+   next = nextNode;
+  }
+ }
+   
+    // Fields head and tail point to the first and last nodes of the list.
+    private DLLNode head, tail;
+    private int counter = 0;
+    /**
+     * Constructor of an empty DLL
+     * @return DoublyLinkedList
+     */
+    public DoublyLinkedList()
+    {
+     head = null;
+     tail = null;
+    }
+    /**
+     * Inserts a node with data at the end of the list
+     * @return no return
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     * 	isEmpty has a running cost of Theta(1)
+     * 	the worst case is if either conditions are satisfied which results in the 
+     *  operations being executed - as they are constant the running cost is Theta(1)
+     *  as the largest value is the running cost and the other terms are disregarded - Theta(1) is the cost
+     */
+    public void insertLast(T data){
+     DLLNode newNode;
+     if (isEmpty()) {
+      newNode = new DLLNode(data,null,null);
+      this.head = newNode;
+      this.tail = newNode;
+     }
+     else {
+      newNode = new DLLNode(data,this.tail,null);
+      this.tail.next = newNode;
+      this.tail = newNode;
+     }
+    }
+    /**
+     * Inserts node with data at the head of the list
+     * @return no return
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     * 	isEmpty has a running cost of Theta(1)
+     *  worst case either the if or else conditions are entered and the operations are executed
+     *  the operations have an asymtotic running cost of Theta(1) as they are constant 
+     *  therefore the asymtotic runnning cost is Theta(1)
+     */
+    public void insertFirst(T data) {
+     DLLNode newNode;
+     if (isEmpty()) {
+      newNode = new DLLNode(data,null,null);
+      this.head = newNode;
+      this.tail = newNode;
+     }
+     else {
+      newNode = new DLLNode(data,null,this.head);
+      this.head.prev = newNode;
+      this.head = newNode;
+     }
+    }
+    /**
+     * Tests if the doubly linked list is empty
+     * @return true if list is empty, and false otherwise
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     *  the operations have an asymtotic running cost of Theta(1) as they are constant 
+     *  as it only iterates once it costs Theta(1)
+     */
+    public boolean isEmpty()
+    {
+     // TODO
+     if ((this.head == null) && (this.tail == null)) {
+      return true;
+     }
+     else return false;
+    }
+    /**
+     * Inserts an element in the doubly linked list
+     * @param pos : The integer location at which the new data should be
+     *      inserted in the list. We assume that the first position in the list
+     *      is 0 (zero). If pos is less than 0 then add to the head of the list.
+     *      If pos is greater or equal to the size of the list then add the
+     *      element at the end of the list.
+     * @param data : The new data of class T that needs to be added to the list
+     * @return none
+     *
+     * Worst-case asymptotic running time cost: Theta(N)
+     *  
+     * Justification:
+     *  worst case running cost is if t else statements is entered
+     * 	both insertFirst() and insertLast() cost Theta(1) asymtotic running time cost
+     * 	the else statement has a for loop which in the worst case will iterate N times
+     * 	after the else statement, some constant operations are carried out
+     * 	the asymtotic running time cost is Theta(N) + Theta(1) 
+     * 	dropping all terms after the largest term results in Theta(N) 
+     */
+    public void insertBefore( int pos, T data )
+    {
+     //TODO
+     DLLNode insertNode;
+     if (pos <= 0) {
+      insertFirst(data);
+      counter++;
+     }
+     else if (pos>=counter){
+      insertLast(data);
+      counter++;
+     }
+     else {
+      DLLNode currentNode = this.head;
+      for(int i = 0; i<pos; i++){
+       currentNode = currentNode.next;
+      }
+      DLLNode copyNode = currentNode.prev;
+      insertNode =  new DLLNode(data,currentNode.prev,currentNode);
+      copyNode.next = insertNode;
+      currentNode.prev = insertNode;
+      counter++;
+     }
+    }
+    /**
+     * Returns the data stored at a particular position
+     * @param pos : the position
+     * @return the data at pos, if pos is within the bounds of the list, and null otherwise.
+     *
+     * Worst-case asymptotic running time cost: Theta(N)
+     *
+     * Justification:
+     *  isEmpty costs Theta(1) asymptotic running time
+     *  the worst case is if the first condition is satisfied - if (pos>0 && pos<counter) as this has a loop
+     *  and the other has simple instructions which costs Theta(1) and runs once unlike the loop
+     *  the for loop costs Theta(1) each time it runs and iterates N times
+     *  taking the largest term as the answer, the cost is N*Theta(1) = Theta(N)
+     */
+    public T get(int pos)
+    {
+     //TODO
+     if (!isEmpty()) {
+      if (pos>0 && pos<counter) {
+       DLLNode newNode = this.head;
+       for (int i = 0; i<pos;i++) {
+        newNode = newNode.next;
+       }
+       return newNode.data;
+      }
+      else if (pos==0)  {
+       return this.head.data;
+      }
+     }
+     return null;
+    }
+    /**
+     * Deletes the element of the list at position pos.
+     * First element in the list has position 0. If pos points outside the
+     * elements of the list then no modification happens to the list.
+     * @param pos : the position to delete in the list.
+     * @return true : on successful deletion, false : list has not been modified.
+     *
+     * Worst-case asymptotic running time cost: Theta(n)
+     *
+     * Justification:
+     *  worst case is if the first condition is satisfied (as the other conditions
+     *  only cost Theta(1) to be carried out as they are simple operations), the for loop
+     *  results iterates over the operations at a cost of Theta(1) each time
+     *  the loop operates N times
+     *  therefore the cost is N*Theta(1) = Theta(N)
+     *  in a cost of Theta(N)
+     */
+    public boolean deleteAt(int pos)
+    {
+     //TODO
+     if (!isEmpty()) {
+      
+      if(pos<0){
+       return false;
+      }
+      if(counter<=pos){
+    	  return false;
+      }
+      DLLNode pointer = this.head;   
+      int diff = 0;
+     
+      for(int i = 0; pointer.next != null && i<pos; i++) {
+       pointer = pointer.next;
+       diff = pos - i;
+      }
+      if(pos == 0|| diff ==1) {
+       if (pointer.prev != null) {
+        (pointer.prev).next = pointer.next;
+       }
+       else {
+        this.head = pointer.next;
+       }
+       if(pointer.next != null) {
+        (pointer.next).prev = pointer.prev;
+       }
+       else {
+        this.tail = pointer.prev;
+       }
+      }
+      counter--;
+      return true;
+     }
+     return false;
+    }
+      
+  
+    /**
+     * Reverses the list.
+     * If the list contains "A", "B", "C", "D" before the method is called
+     * Then it should contain "D", "C", "B", "A" after it returns.
+     *
+     * Worst-case asymptotic running time cost: Theta(N)
+     *
+     * Justification:
+     *  worst case is if the doubly linked list isnt empty and the do while loop is entered
+     *  isEmpty costs Theta(1)
+     *  the loop costs Theta(1) each time it iterates
+     *  the loop iterates N times
+     *  then some constant operations are executed with a cost of Theta(1)
+     *  therfore costing N*Theta(1) = Theta(N) asymtotic running time cost 
+     *  all the other operations are constant and therefore cost Theta(1)
+     */
+    public void reverse()
+    {
+     //TODO
+     if (!isEmpty()&& counter!=1) {
+      DLLNode newNode = head;
+      DLLNode nextNode;
+      while(newNode != null) {
+       nextNode = newNode.next;
+       DLLNode nextCopy = newNode.next;
+       newNode.next = newNode.prev;
+       newNode.prev = nextCopy;
+       newNode = nextNode;
+      }
+      DLLNode copyHead = this.head;
+      this.head = this.tail;
+      this.tail = copyHead;
+     }
+    }
+  
+    /**
+     * Removes all duplicate elements from the list.
+     * The method should remove the _least_number_ of elements to make all elements uniqueue.
+     * If the list contains "A", "B", "C", "B", "D", "A" before the method is called
+     * Then it should contain "A", "B", "C", "D" after it returns.
+     * The relative order of elements in the resulting list should be the same as the starting list.
+     *
+     * Worst-case asymptotic running time cost: Theta(N^3)
+     *
+     * Justification:
+     *  worst case the two do while loops are entered which cost Theta(1) asymtotic time each time it iterates
+     *  worst case both loops iterate N times
+     *  if the deleteAt is called in every iteration then it will cost Theta(N)
+     *  therfore the cost is Theta(1)*N*N*N = Theta(N^3)
+     */
+    public void makeUnique()
+    {
+     //TODO
+     if(!isEmpty()&&get(1)!=null) {
+      DLLNode newNodeI = head;
+      for(int i = 0; newNodeI != null; i++) {
+          DLLNode newNodeJ = head.next;
+       for(int j = i+1; newNodeJ != null; j++) {
+        T dataI = newNodeI.data;
+        T dataJ = newNodeJ.data;
+        if(dataI.equals(dataJ)) {
+         deleteAt(j);
+         j--;
+        }
+        newNodeJ = newNodeJ.next;
+       }
+       newNodeI = newNodeI.next;
+      }
+     }
+    }
+
+    /*----------------------- STACK API
+     * If only the push and pop methods are called the data structure should behave like a stack.
+     */
+    /**
+     * This method adds an element to the data structure.
+     * How exactly this will be represented in the Doubly Linked List is up to the programmer.
+     * @param item : the item to push on the stack
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     *  worst case all the operations are carried out with a cost of Theta(1) asymptotic running time
+     */
+    public void push(T item)
+    {
+     //TODO
+     if(!isEmpty()) {
+      DLLNode newNode = new DLLNode(item,null,head);
+      head.prev = newNode;
+      head = newNode;
+      counter++;
+     }
+     else {
+  insertFirst(item);
+  counter++;
+     }
+    }
+    /**
+     * This method returns and removes the element that was most recently added by the push method.
+     * @return the last item inserted with a push; or null when the list is empty.
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     *  worst case all the operations are carried out which result in a cost of Theta(1)
+     */
+    public T pop()
+    {
+     //TODO
+     if(!isEmpty()&&head.next != null) {
+      T data = head.data;
+      head = head.next;
+      head.prev = null;
+      counter--;
+      return data;
+     }
+     else if(counter == 1) {
+      T data = head.data;
+      head = null;
+      tail = null;
+      counter--;
+      return data;
+     }
+     return null;
+    }
+    /*----------------------- QUEUE API
+     * If only the enqueue and dequeue methods are called the data structure should behave like a FIFO queue.
+     */
+    /**
+     * This method adds an element to the data structure.
+     * How exactly this will be represented in the Doubly Linked List is up to the programmer.
+     * @param item : the item to be enqueued to the stack
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     *  worst case one of the conditions is entered which contains some
+     *  isEmpty costs Theta(1) to carry out 
+     *  constant operations which cost Theta(1) to execute
+     *  therefore the asymtotic running time cost is Theta(1)
+     */
+    public void enqueue(T item)
+    {
+     //TODO
+     if(!isEmpty()) {
+      DLLNode newNode = new DLLNode(item,tail,null);
+      tail.next = newNode;
+      tail = newNode;
+      counter++;
+     }
+     else {
+      insertLast(item);
+      counter++;
+     }
+    }
+     /**
+     * This method returns and removes the element that was least recently added by the enqueue method.
+     * @return the earliest item inserted with an equeue; or null when the list is empty.
+     *
+     * Worst-case asymptotic running time cost: Theta(1)
+     *
+     * Justification:
+     *  worst case one of the conditions are satisfied either the if or the else if 
+     *  isEmpty costs Theta(1) to carry out 
+     *  some constant operations are carried out with a cost of Theta(1)
+     *  the asymtotic running time cost is Theta(1)
+     */
+    public T dequeue()
+    {
+     //TODO
+     if(!isEmpty()&&head.next!=null) {
+      T data = head.data;
+      head = head.next;
+      head.prev = null;
+      counter--;
+      return data;
+     }
+     else if(counter == 1) {
+      T data = head.data;
+      head = null;
+      tail = null;
+      counter--;
+      return data;
+     }
+     return null;
+    }
+    /**
+     * @return a string with the elements of the list as a comma-separated
+     * list, from beginning to end
+     *
+     * Worst-case asymptotic running time cost:   Theta(n)
+     *
+     * Justification:
+     *  We know from the Java documentation that StringBuilder's append() method runs in Theta(1) asymptotic time.
+     *  We assume all other method calls here (e.g., the iterator methods above, and the toString method) will execute in Theta(1) time.
+     *  Thus, every one iteration of the for-loop will have cost Theta(1).
+     *  Suppose the doubly-linked list has 'n' elements.
+     *  The for-loop will always iterate over all n elements of the list, and therefore the total cost of this method will be n*Theta(1) = Theta(n).
+     */
+    public String toString()
+    {
+      StringBuilder s = new StringBuilder();
+      boolean isFirst = true;
+      // iterate over the list, starting from the head
+      for (DLLNode iter = head; iter != null; iter = iter.next)
+      {
+        if (!isFirst)
+        {
+          s.append(",");
+        } else {
+          isFirst = false;
+        }
+        s.append(iter.data.toString());
+      }
+      return s.toString();
+    }
+ }
