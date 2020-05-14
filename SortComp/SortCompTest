@@ -1,0 +1,129 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+//-------------------------------------------------------------------------
+/**
+ *  Test class for SortComparison.java
+ *
+ *  @author
+ *  @version HT 2020
+ */
+@RunWith(JUnit4.class)
+public class SortComparisonTest
+{
+    //~ Constructor ........................................................
+    @Test
+    public void testConstructor()
+    {
+        new SortComparison();
+    }
+
+    //~ Public Methods ........................................................
+
+    // ----------------------------------------------------------
+    /**
+     * Check that the methods work for empty arrays
+     */
+    @Test
+    public void testEmpty()
+    {
+    }
+
+
+    // TODO: add more tests here. Each line of code and ech decision in Collinear.java should
+    // be executed at least once from at least one test.
+
+    // ----------------------------------------------------------
+    /**
+     *  Main Method.
+     *  Use this main method to create the experiments needed to answer the experimental performance questions of this assignment.
+     *
+     */
+    public static void main(String[] args)
+    {
+        //TODO: implement this method
+    }
+    @Test
+    public void testInsertionSort() {
+    	double[] test1 = null;
+    	double[] result1 = null;
+    	test1 = SortComparison.insertionSort(test1);
+    	assertTrue(SortComparison.isEqual(test1,result1));
+
+    	double[] test2 = {2.0,10.0,3.0};
+    	double[] result2 = {2.0,3.0,10.0};
+    	test2 = SortComparison.insertionSort(test2);
+    	assertTrue(SortComparison.isEqual(test2,result2));		
+    }
+
+    @Test
+    public void testSelectionSort() {
+    	double[] test1 = null;
+    	double[] result1 = null;
+    	test1 = SortComparison.selectionSort(test1);
+    	assertTrue(SortComparison.isEqual(test1,result1));
+
+    	double[] test2 = {2.0,10.0,3.0};
+    	double[] result2 = {2.0,3.0,10.0};
+    	test2 = SortComparison.selectionSort(test2);
+    	assertTrue(SortComparison.isEqual(test2,result2));
+    }
+
+    @Test
+    public void testRecMergeSort() {
+    	double[] test1 = null;
+    	double[] result1 = null;
+    	test1=SortComparison.mergeSortRecursive(test1);
+    	assertTrue(SortComparison.isEqual(test1,result1));
+
+    	double[] test2 = {2.0,10.0,3.0};
+    	double[] result2 = {2.0,3.0,10.0};
+    	test2 = SortComparison.mergeSortRecursive(test2);
+    	assertTrue(SortComparison.isEqual(test2,result2));
+    }
+    @Test
+    public void testIterMergeSort() {
+    	double[] test1 = null;
+    	double[] result1 = null;
+    	test1 = SortComparison.mergeSortIterative(test1);
+    	assertTrue(SortComparison.isEqual(test1,result1));
+
+    	double[] test2 = {2.0,10.0,3.0};
+    	double[] result2 = {2.0,3.0,10.0};
+    	test2 = SortComparison.mergeSortIterative(test2);
+    	assertTrue(SortComparison.isEqual(test2,result2));
+    }
+
+    @Test
+    public void testQuickSort() {
+    	double[] test1 = null;
+    	double[] result1 = null;
+    	test1 = SortComparison.quickSort(test1);
+    	assertTrue(SortComparison.isEqual(test1,result1));
+
+    	double[] test2 = {2.0,10.0,3.0};
+    	double[] result2 = {2.0,3.0,10.0};
+    	test2 = SortComparison.quickSort(test2);
+    	assertTrue(SortComparison.isEqual(test2,result2));
+    }
+    
+    @Test
+    public void testIsEqual() {
+    	double[] a1 = null;
+    	double[] b1 = {2.0,3.0,4.0};
+    	assertFalse(SortComparison.isEqual(a1,b1));
+    	
+    	double[] a2 = {2.0,3.0,4.0};
+    	double[] b2 = null;
+    	assertFalse(SortComparison.isEqual(a2,b2));
+    	
+    	double[] a3 = {2.0,3.0,4.0};
+    	double[] b3 = {2.0,3.0,6.0};
+    	assertFalse(SortComparison.isEqual(a3,b3));
+    }
+}

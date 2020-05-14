@@ -1,0 +1,286 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+// -------------------------------------------------------------------------
+
+/**
+ *  This class contains static methods that implementing sorting of an array of numbers
+ *  using different sort algorithms.
+ *
+ *  @author
+ *  @version HT 2020
+ */
+public class SortComparison {
+
+
+	/**
+	 * Sorts an array of doubles using InsertionSort.
+	 * This method is static, thus it can be called as SortComparison.sort(a)
+	 * @param a: An unsorted array of doubles.
+	 * @return array sorted in ascending order.
+	 * @throws FileNotFoundException 
+	 *
+	 */
+	public static void main(String[] args) throws FileNotFoundException {
+	/**	File file = new File("numbersSorted1000.txt");
+		Scanner scan = new Scanner(file);
+		int size = 1000;
+		
+		double[] a = new double[size];
+		double[] b = new double[size];
+		double[] c = new double[size];
+		double[] d = new double[size];
+		double[] e = new double[size];
+		
+		for(int i = 0; i<size;i++) {
+			a[i] = scan.nextDouble();
+		}
+		b = a; c = a; d = a; e = a;
+		
+		double startTime = System.nanoTime();
+		insertionSort(a);
+		double endTime = System.nanoTime();
+		double  result = (endTime - startTime)/1000000;
+		System.out.println("InsertionSort took " + (result) + " milliseconds");
+		
+		double startTime2 = System.nanoTime();
+		selectionSort(b);
+		double endTime2 = System.nanoTime();
+		double  result2 = (endTime2 - startTime2)/1000000;
+		System.out.println("selectionSort sort took " + (result2) + " milliseconds");
+		
+		double startTime3 = System.nanoTime();
+		quickSort(c);
+		double endTime3 = System.nanoTime();
+		double  result3 = (endTime3 - startTime3)/1000000;
+		System.out.println("quickSort sort took " + (result3) + " milliseconds");
+		
+		double startTime4 = System.nanoTime();
+		mergeSortIterative(d);
+		double endTime4 = System.nanoTime();
+		double  result4 = (endTime4 - startTime4)/1000000;
+		System.out.println("mergeSortIterative sort took " + (result4) + " milliseconds");
+		
+		double startTime5 = System.nanoTime();
+		mergeSortRecursive(e);
+		double endTime5 = System.nanoTime();
+		double  result5 = (endTime5 - startTime5)/1000000;
+		System.out.println("mergeSortRecursive sort took " + (result5) + " milliseconds");
+				
+		scan.close();
+		
+		**/
+		
+	}
+	static double [] insertionSort (double a[]){
+
+		if (a != null) {
+			double temp;
+			for (int i = 1; i < a.length; i++) {
+				for(int j = i ; j > 0 ; j--){
+					if(a[j] < a[j-1]){
+						temp = a[j];
+						a[j] = a[j-1];
+						a[j-1] = temp;
+					}
+				}
+			}
+			return a;
+		}
+		return null;
+	}//end insertionsort
+
+	/**
+	 * Sorts an array of doubles using Selection Sort.
+	 * This method is static, thus it can be called as SortComparison.sort(a)
+	 * @param a: An unsorted array of doubles.
+	 * @return array sorted in ascending order
+	 *
+	 */
+	static double [] selectionSort (double a[]){
+
+		if (a!=null) {
+			for(int i = 0; i<a.length;i++) {
+				int prevIndex = i;
+				for(int j = prevIndex; j<a.length; j++) {
+					if(a[i]>a[j]) {
+						prevIndex = j;
+					}
+					double temp = a[prevIndex];
+					a[prevIndex] = a[i];
+					a[i] = temp;
+				}
+			} 
+			return a;
+		}			
+		return null;
+	}//end selectionsort
+
+	/**
+	 * Sorts an array of doubles using Quick Sort.
+	 * This method is static, thus it can be called as SortComparison.sort(a)
+	 * @param a: An unsorted array of doubles.
+	 * @return array sorted in ascending order
+	 *
+	 */
+
+	static double [] quickSort (double a[]){
+		if (a!=null) {
+			sort(a,0,a.length-1);
+			return a;
+		}
+		return null;
+	}
+	private static int partition(double a[], int low, int high) { 
+		double pivot = a[high];  
+		int i = (low-1);
+		for (int j=low; j<high; j++) { 
+			if (a[j] < pivot) { 
+				i++; 
+				double temp = a[i]; 
+				a[i] = a[j]; 
+				a[j] = temp; 
+			} 
+		} 
+		double temp = a[i+1]; 
+		a[i+1] = a[high]; 
+		a[high] = temp; 
+		return i+1; 
+	} 
+	private static void sort(double a[], int low, int high) { 
+		if (low < high) { 
+			int pi = partition(a, low, high); 
+			sort(a, low, pi-1); 
+			sort(a, pi+1, high); 
+		}  
+	}//end quicksort
+
+	/**
+	 * Sorts an array of doubles using Merge Sort.
+	 * This method is static, thus it can be called as SortComparison.sort(a)
+	 * @param a: An unsorted array of doubles.
+	 * @return array sorted in ascending order
+	 *
+	 */
+	static double[] mergeSortIterative (double a[]) { 
+		if(a != null) {
+			if(a.length > 1) { 
+				int mid = a.length / 2; 
+				// Split left part 
+				double[] left = new double[mid]; 
+				for(int i = 0; i < mid; i++) { 
+					left[i] = a[i]; 
+				} 
+				// Split right part 
+				double[] right = new double[a.length - mid]; 
+				for(int i = mid; i < a.length; i++) { 
+					right[i - mid] = a[i]; 
+				} 
+				mergeSortIterative(left); 
+				mergeSortIterative(right); 
+
+				int i = 0; 
+				int j = 0; 
+				int k = 0; 
+
+				// Merge left and right arrays 
+				while(i < left.length && j < right.length){ 
+					if(left[i] < right[j]) { 
+						a[k] = left[i]; 
+						i++; 
+					} 
+					else{ 
+						a[k] = right[j]; 
+						j++; 
+					} 
+					k++; 
+				} 
+				// Collect remaining elements 
+				while(i < left.length) { 
+					a[k] = left[i]; 
+					i++; 
+					k++; 
+				} 
+				while(j < right.length) { 
+					a[k] = right[j]; 
+					j++; 
+					k++; 
+				} 
+			} 
+			return a;
+		}
+		return null;
+	}
+	//end mergesortIterative
+
+	/**
+	 * Sorts an array of doubles using recursive implementation of Merge Sort.
+	 * This method is static, thus it can be called as SortComparison.sort(a)
+	 *
+	 * @param a: An unsorted array of doubles.
+	 * @return after the method returns, the array must be in ascending sorted order.
+	 */
+	static double[] mergeSortRecursive (double a[]) {
+
+		if(a!=null) {
+			double[] temp = new double[a.length];
+			sort(a,temp,0,a.length-1);
+			return a;
+		}
+		return null;
+	}
+	private static void sort(double[] a, double[] temp, int lo, int hi) {
+		if(hi<=lo)return;
+		int mid = lo+(hi-lo)/2;
+		sort(a,temp,lo,mid);
+		sort(a,temp,mid+1,hi);
+		merge(a,temp,lo,mid,hi);
+	}
+	private static void merge(double[] a, double[] temp, int lo, int mid, int hi) {
+		for (int k = lo; k<= hi; k++) {
+			temp[k]=a[k];
+		}
+		int i = lo, j = mid+1;
+		for(int k = lo;k<=hi; k++) {
+			if(i>mid) {
+				a[k]=temp[j++];
+			}
+			else if(j>hi) {
+				a[k]=temp[i++];
+			}
+			else if(temp[j]<temp[i]) {
+				a[k]=temp[j++];
+			}
+			else {
+				a[k]=temp[i++];
+			}
+		}
+	}
+	public static boolean isEqual(double[] a, double[] b) {
+		boolean equal = true;
+		int i = 0;
+		if (a!=null&&b!=null) {
+			while(equal == true && i<a.length) {
+				if (a[i]!=b[i]) {
+					equal = false;
+				}
+				i++;
+			}
+			return equal;
+		}
+		if(a!=null || b!=null) {
+		return false;
+		}
+		return equal;
+	}
+}
+/**						insert 		selection 		merge recursive				merge iterative				quick
+ * 10 random					0.0039		0.0037			0.0056					0.0058					0.0061
+ * 100 random					0.0895		0.1303			0.106					0.042					0.0305
+ * 1000 random					3.4034		3.066			2.8156					0.47					0.2785
+ * 1000 few unique				4.302		3.097			1.0605					0.4338					0.327
+ * 1000 nearly ordered				3.1173		3.1978			2.7211					0.4075					0.2874
+ * 1000 reverse ordered				4.4511		3.117			2.8401					0.5617					0.5136
+ * 1000 sorted 					6.5707		4.0460			3.7344					0.6370					0.5527
+ */
