@@ -1,0 +1,132 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class ArithTest {
+
+	@Test
+	public void testValidatePrefixOrder() {
+		String[] test={"*","+","1","2","-","3","4"};
+		assertTrue("Test validate prefix order with prefix formula:", Arith.validatePrefixOrder(test));
+		test = null;
+		assertFalse("Test validate prefix order with null:", Arith.validatePrefixOrder(test));
+		String[] test1={"*","+","0","5","-","6","7","+"};
+		assertFalse("Test validate prefix order with non prefix expression:", Arith.validatePrefixOrder(test1));
+		String[] test2 = {"8","9","3","^","/","4","5","*","+","1","3","*","-"};
+		assertFalse("Test validate prefix order with non prefix expression:", Arith.validatePrefixOrder(test2));
+		String[] test3 = {"-1","9","3","^"};
+		assertFalse("Test validate prefix order with non prefix expression:", Arith.validatePrefixOrder(test3));
+	}
+
+	@Test
+	public void testValidatePostfixOrder() {
+		String[] test={"1","2","3","^","/","4","5","*","+","1","3","*","-"};
+		assertTrue("Test validate postfix order with prefix formula:", Arith.validatePostfixOrder(test));
+		test = null;
+		assertFalse("Test validate postfix order with null:", Arith.validatePostfixOrder(test));
+		String[] test1={"1","2","3","+","+","6"};
+		assertFalse("Test validate postfix order with non postfix expression:", Arith.validatePostfixOrder(test1));
+		String[] test2 = {"*","+","1","2","-","3","4"};
+		assertFalse("Test validate postfix order with non postfix expression:", Arith.validatePostfixOrder(test2));
+	}
+	
+	@Test
+	public void testEvaluatePrefixOrder() {
+		String[] test = {"+","9","*","2","6"};
+		int result = 21;
+        assertEquals("Checking prefix evaluation", result, Arith.evaluatePrefixOrder(test));
+        String[] test1 = {"-","9","5"};
+        result = 4;
+        assertEquals("Checking prefix evaluation", result, Arith.evaluatePrefixOrder(test1));
+        String[] test2 = {"^","2","2"};
+        result = 4;
+        assertEquals("Checking prefix evaluation", result, Arith.evaluatePrefixOrder(test2));
+        String[] test3 = {"/","8","2"};
+        result = 4;
+        assertEquals("Checking prefix evaluation", result, Arith.evaluatePrefixOrder(test3));
+
+	}
+	@Test
+	public void testEvaluatePostfixOrder() {
+		String[] test = {"7","3","*"};
+		int result = 21;
+        assertEquals("Checking height of non-empty tree", result, Arith.evaluatePostfixOrder(test));
+        String[] test1 = {"7","3","+"};
+		result = 10;
+        assertEquals("Checking height of non-empty tree", result, Arith.evaluatePostfixOrder(test1));
+        String[] test2 = {"7","3","^"};
+		result = 343;
+        assertEquals("Checking height of non-empty tree", result, Arith.evaluatePostfixOrder(test2));
+        String[] test3 = {"9","3","/","3","-"};
+		result = 0;
+        assertEquals("Checking height of non-empty tree", result, Arith.evaluatePostfixOrder(test3));
+	}
+
+	@Test
+	public void testConvertPrefixToPostfix() {
+		String[] test = {"*","3","7"};
+		String[] result = {"3","7","*"};
+        assertArrayEquals("", result, Arith.convertPrefixToPostfix(test));
+	}
+	@Test
+	public void testConvertPostfixToPrefix() {
+		String[] test = {"5","4","-"};
+		String[] result = {"-","5","4"};
+        assertArrayEquals("Test postfix to prefix conversion", result, Arith.convertPostfixToPrefix(test));
+        String[] result1 = {"*","+","1","2","/","3","4"};
+        String[] test1 = {"1","2", "+", "3", "4", "/", "*"};
+        assertArrayEquals("Test postfix to prefix conversion", result1, Arith.convertPostfixToPrefix(test1));
+        String[] test2 = {"5","4","^"};
+		String[] result2 = {"^","5","4"};
+        assertArrayEquals("Test postfix to prefix conversion", result2, Arith.convertPostfixToPrefix(test2));
+	}
+	@Test
+	public void testIsOperator() {
+		String test1 = "+";
+		assertTrue(Arith.isOperator(test1));
+		String test2 = "-";
+		assertTrue(Arith.isOperator(test2));
+		String test3 = "^";
+		assertTrue(Arith.isOperator(test3));
+		String test4 = "/";
+		assertTrue(Arith.isOperator(test4));
+		String test5 = "*";
+		assertTrue(Arith.isOperator(test5));
+		String test6 = null;
+		assertFalse(Arith.isOperator(test6));
+		String test7 = "2";
+		assertFalse(Arith.isOperator(test7));
+
+	}
+
+	@Test
+	public void testConvertPrefixToInfix() {
+		String[] test1 = {"*","+","1","2","-","3","4"};
+		String[] result1 = {"(","(","1","+","2",")","*","(","3","-","4",")",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result1, Arith.convertPrefixToInfix(test1));
+
+		String[] test2 = {"^","1", "7",};
+		String[] result2 = {"(","1","^","7",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result2, Arith.convertPrefixToInfix(test2));
+
+		String[] test3 = {"/","2","4"};
+		String[] result3 = {"(","2","/","4",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result3, Arith.convertPrefixToInfix(test3));
+
+	}
+	
+	@Test
+	public void testConvertPostfixToInfix() {
+		String[] test1 = {"1", "2", "3", "*", "+"};
+		String[] result1 = {"(","1","+","(","2","*","3",")",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result1, Arith.convertPostfixToInfix(test1));
+
+		String[] test2 = {"1", "2", "^", "7", "-"};
+		String[] result2 = {"(","(","1","^","2",")","-","7",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result2, Arith.convertPostfixToInfix(test2));
+
+		String[] test3 = {"1","2","3","/","-"};
+		String[] result3 = {"(","1","-","(","2","/","3",")",")"};
+		assertArrayEquals("Test the posfix to infix conversion with postfix expression", result3, Arith.convertPostfixToInfix(test3));	}
+
+}
